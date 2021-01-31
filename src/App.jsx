@@ -31,24 +31,24 @@ const state = proxy({
 });
 
 function SomeComponent({ data }) {
-  console.log(data);
-  return <div>{data}</div>;
+  return React.useMemo(() => {
+    console.log(data);
+    return <div>{data}</div>;
+  }, [data]);
 }
+
+// function SomeComponent({ data }) {
+//   console.log(data);
+//   return <div>{data}</div>;
+// }
 
 function App() {
   const snapshot = useProxy(state);
-  // const MemoizedSomeComponent = React.useMemo(() => SomeComponent, [
-  //   snapshot.text,
-  // ]);
-  // const MemoizedSomeComponent = React.useCallback(() => SomeComponent, []);
-  const MemoizedSomeComponent = React.memo(() => SomeComponent, [
-    snapshot.text,
-  ]);
 
   return (
     <div className="App">
       <header className="App-header">
-        <MemoizedSomeComponent data={snapshot.randomNumber} />
+        <SomeComponent data={snapshot.randomNumber} />
         <br />
         {snapshot.count}
         <br />
