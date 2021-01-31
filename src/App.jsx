@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { proxy, useProxy } from "valtio";
+import memoize from "proxy-memoize";
 import "./App.css";
 
 const state = proxy({
   count: 0,
-  text: "hello " + Math.random(),
+  text: "hello",
+  randomNumber: Math.random(),
   useIncrement: function () {
     ++this.count;
   },
@@ -28,12 +30,26 @@ const state = proxy({
   },
 });
 
+function SomeComponent({ data }) {
+  console.log(data);
+  return <div>{data}</div>;
+}
+
 function App() {
   const snapshot = useProxy(state);
+  // const MemoizedSomeComponent = React.useMemo(() => SomeComponent, [
+  //   snapshot.text,
+  // ]);
+  // const MemoizedSomeComponent = React.useCallback(() => SomeComponent, []);
+  const MemoizedSomeComponent = React.memo(() => SomeComponent, [
+    snapshot.text,
+  ]);
 
   return (
     <div className="App">
       <header className="App-header">
+        <MemoizedSomeComponent data={snapshot.randomNumber} />
+        <br />
         {snapshot.count}
         <br />
         {snapshot.text}

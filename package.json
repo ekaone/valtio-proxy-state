@@ -9,6 +9,7 @@
     "snowpack": "^3.0.1"
   },
   "dependencies": {
+    "proxy-memoize": "^0.3.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "valtio": "^0.6.3"
